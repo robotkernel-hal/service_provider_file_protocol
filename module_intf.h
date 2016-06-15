@@ -25,5 +25,22 @@
 #ifndef __INTERFACE_FILE_PROTOCOL_MODULE_INTF_H__
 #define __INTERFACE_FILE_PROTOCOL_MODULE_INTF_H__
 
+#define MOD_REQUEST_FILE_PROTOCOL_MAGIC  0x24
+#define MOD_REQUEST_FILE_PROTOCOL(x, s) \
+    __MOD_REQUEST((MOD_REQUEST_FILE_PROTOCOL_MAGIC), (x), __MOD_REQUEST_TYPE(s))
+
+//! file read 
+typedef struct file_read_info {
+    int       slave_id;             //! [in]     slave id
+    char*     password;             //! [in]     file password (NULL-terminated)
+    char*     file_name;            //! [in]     file name (NULL-terminated)
+
+    uint8_t*  file_data;            //! [out]    file data, allocated by module
+    ssize_t   file_data_len;        //! [out]    length of file data
+} file_read_info_t;
+
+#define MOD_REQUEST_FILE_READ  \
+    MOD_REQUEST_FILE_PROTOCOL(0x0001, file_read_info_t)
+
 #endif // __INTERFACE_FILE_PROTOCOL_MODULE_INTF_H__
 
