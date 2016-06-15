@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.63])
-AC_INIT([interface_canopen_protocol], [4.0.3], [robert.burger@dlr.de])
+AC_INIT([interface_file_protocol], [4.0.0], [robert.burger@dlr.de])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -79,7 +79,7 @@ AC_CHECK_LIB(dl, dlopen, DL_LIBS="-ldl", DL_LIBS=)
 AC_SUBST(DL_LIBS)
 
 AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([interface_canopen_protocol.pt], [cp interface_canopen_protocol.pt ${ac_abs_top_srcdir}])
+AC_CONFIG_FILES([interface_file_protocol.pt], [cp interface_file_protocol.pt ${ac_abs_top_srcdir}])
 
 AC_OUTPUT
 

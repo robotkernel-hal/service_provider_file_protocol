@@ -37,7 +37,7 @@
 namespace interface_file_protocol {
     
 class file_protocol : 
-    public robotkernel::interface_base,
+    public robotkernel::interface_base
 {
     public:
         //! default construction
