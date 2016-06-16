@@ -30,17 +30,21 @@
     __MOD_REQUEST((MOD_REQUEST_FILE_PROTOCOL_MAGIC), (x), __MOD_REQUEST_TYPE(s))
 
 //! file read 
-typedef struct file_read_info {
+typedef struct file_readwrite_info {
     int       slave_id;             //! [in]     slave id
     char*     password;             //! [in]     file password (NULL-terminated)
     char*     file_name;            //! [in]     file name (NULL-terminated)
 
-    uint8_t*  file_data;            //! [out]    file data, allocated by module
-    ssize_t   file_data_len;        //! [out]    length of file data
-} file_read_info_t;
+    uint8_t*  file_data;            //! [in/out] file data, allocated by read: module, write: interface
+    ssize_t   file_data_len;        //! [in/out] length of file data
+    char*     error_message;        //! [out]    NULL or error-message, allocated 
+                                    //           by module (NULL-terminated)
+} file_readwrite_info_t;
 
 #define MOD_REQUEST_FILE_READ  \
-    MOD_REQUEST_FILE_PROTOCOL(0x0001, file_read_info_t)
+    MOD_REQUEST_FILE_PROTOCOL(0x0001, file_readwrite_info_t)
+#define MOD_REQUEST_FILE_WRITE  \
+    MOD_REQUEST_FILE_PROTOCOL(0x0002, file_readwrite_info_t)
 
 #endif // __INTERFACE_FILE_PROTOCOL_MODULE_INTF_H__
 

@@ -56,29 +56,39 @@ file_protocol::file_protocol(const YAML::Node& node)
         
 int file_protocol::on_file_read(ln::service_request& req, 
         ln_service_robotkernel_file_protocol_file_read& svc) {
-    file_read_info_t fri;
-    fri.slave_id = slave_id;
-    fri.password = svc.req.password;
-    fri.file_name = svc.req.file_name;
+    file_readwrite_info_t frwi;
+    memset(&frwi, 0, sizeof(frwi));
+    frwi.slave_id  = slave_id;
+    frwi.password  = svc.req.password;
+    frwi.file_name = strndup(svc.req.file_name, svc.req.file_name_len);
 
     // execute module request file read
     int ret = kernel::request_cb(mod_name.c_str(), 
-            MOD_REQUEST_FILE_READ, (void *)&fri);
+            MOD_REQUEST_FILE_READ, (void *)&frwi);
     if (ret == -1) {
-        svc.resp.error_message = strdup("reading file failed!");
+        printf("got error\n");
+        if (frwi.error_message) 
+            svc.resp.error_message = frwi.error_message;
+        else
+            svc.resp.error_message = strdup("reading file failed!");
+
+        svc.resp.error_message_len = strlen(svc.resp.error_message);
+
         goto exit;
     }
 
-    if (fri.file_data && (fri.file_data_len > 0)) {
+    if (frwi.file_data && (frwi.file_data_len > 0)) {
         // copy file data
-        svc.resp.file_data_len = fri.file_data_len;
-        svc.resp.file_data = (uint8_t *)malloc(fri.file_data_len);
-        memcpy(svc.resp.file_data, fri.file_data, fri.file_data_len);
+        svc.resp.file_data_len = frwi.file_data_len;
+        svc.resp.file_data = (uint8_t *)malloc(frwi.file_data_len);
+        memcpy(svc.resp.file_data, frwi.file_data, frwi.file_data_len);
     }
 
 exit:
     req.respond();
 
+    if (frwi.file_name)
+        free(frwi.file_name);
     if (svc.resp.error_message)
         free(svc.resp.error_message);
     if (svc.resp.file_data)
@@ -89,7 +99,32 @@ exit:
 
 int file_protocol::on_file_write(ln::service_request& req, 
         ln_service_robotkernel_file_protocol_file_write& svc) {
+    file_readwrite_info_t frwi;
+    memset(&frwi, 0, sizeof(frwi));
+    frwi.slave_id       = slave_id;
+    frwi.password       = svc.req.password;
+    frwi.file_name      = svc.req.file_name;
+    frwi.file_data      = svc.req.file_data;
+    frwi.file_data_len  = svc.req.file_data_len;
+
+    // execute module request file read
+    int ret = kernel::request_cb(mod_name.c_str(), 
+            MOD_REQUEST_FILE_WRITE, (void *)&frwi);
+    if (ret == -1) {
+        if (frwi.error_message) 
+            svc.resp.error_message = frwi.error_message;
+        else
+            svc.resp.error_message = strdup("writing file failed!");
+
+        goto exit;
+    }
+
+exit:
     req.respond();
+
+    if (svc.resp.error_message)
+        free(svc.resp.error_message);
+
     return 0;
 }
 
