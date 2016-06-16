@@ -29,6 +29,9 @@
 #define MOD_REQUEST_FILE_PROTOCOL(x, s) \
     __MOD_REQUEST((MOD_REQUEST_FILE_PROTOCOL_MAGIC), (x), __MOD_REQUEST_TYPE(s))
 
+#include <stdint.h>
+#include <unistd.h>
+
 //! file read 
 typedef struct file_readwrite_info {
     int       slave_id;             //! [in]     slave id
