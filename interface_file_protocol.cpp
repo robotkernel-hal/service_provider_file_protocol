@@ -52,6 +52,7 @@ file_protocol::file_protocol(const YAML::Node& node)
     base << k.clnt->name << "." << mod_name << "." << dev_name << ".";
 
     register_file_read(k.clnt, base.str() + "file_protocol.file_read");
+    register_file_write(k.clnt, base.str() + "file_protocol.file_write");
 }
         
 int file_protocol::on_file_read(ln::service_request& req, 
@@ -59,7 +60,7 @@ int file_protocol::on_file_read(ln::service_request& req,
     file_readwrite_info_t frwi;
     memset(&frwi, 0, sizeof(frwi));
     frwi.slave_id  = slave_id;
-    frwi.password  = svc.req.password;
+    frwi.password  = strndup(svc.req.password, svc.req.password_len);
     frwi.file_name = strndup(svc.req.file_name, svc.req.file_name_len);
 
     // execute module request file read
@@ -87,6 +88,8 @@ int file_protocol::on_file_read(ln::service_request& req,
 exit:
     req.respond();
 
+    if (frwi.password)
+        free(frwi.password);
     if (frwi.file_name)
         free(frwi.file_name);
     if (svc.resp.error_message)
@@ -102,8 +105,8 @@ int file_protocol::on_file_write(ln::service_request& req,
     file_readwrite_info_t frwi;
     memset(&frwi, 0, sizeof(frwi));
     frwi.slave_id       = slave_id;
-    frwi.password       = svc.req.password;
-    frwi.file_name      = svc.req.file_name;
+    frwi.password       = strndup(svc.req.password, svc.req.password_len);
+    frwi.file_name      = strndup(svc.req.file_name, svc.req.file_name_len);
     frwi.file_data      = svc.req.file_data;
     frwi.file_data_len  = svc.req.file_data_len;
 
@@ -122,6 +125,10 @@ int file_protocol::on_file_write(ln::service_request& req,
 exit:
     req.respond();
 
+    if (frwi.password)
+        free(frwi.password);
+    if (frwi.file_name)
+        free(frwi.file_name);
     if (svc.resp.error_message)
         free(svc.resp.error_message);
 
