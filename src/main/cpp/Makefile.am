@@ -15,7 +15,7 @@ libinterface_file_protocol_la_CXXFLAGS = -fno-strict-aliasing \
 
 libinterface_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION)
 
-VPATH = $(srcdir):$(srcdir)/share/ln/message_definitions
+VPATH = $(srcdir):$(top_srcdir)/share/ln/message_definitions
 
 LN_MESSAGES = robotkernel/file_protocol/file_read \
 			  robotkernel/file_protocol/file_write
