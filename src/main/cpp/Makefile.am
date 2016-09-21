@@ -6,20 +6,15 @@ CLEANFILES = ln_messages.h
 
 libinterface_file_protocol_la_SOURCES  = interface_file_protocol.cpp
 
-libinterface_file_protocol_la_CXXFLAGS = -fno-strict-aliasing \
-											-Wall \
-											-I$(top_srcdir)/src \
-											-I$(top_builddir) \
-											@ROBOTKERNEL_CFLAGS@ \
-								 			@LIBSTRING_UTIL_CFLAGS@ \
-											@YAML_CPP_CFLAGS@
+libinterface_file_protocol_la_CXXFLAGS = -fno-strict-aliasing -Wall -I$(srcdir) -I$(builddir) \
+                                         @ROBOTKERNEL_CFLAGS@ @LIBSTRING_UTIL_CFLAGS@ @YAML_CPP_CFLAGS@
 
 libinterface_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION)
 
 VPATH = $(srcdir):$(top_srcdir)/share/ln/message_definitions
 
 LN_MESSAGES = robotkernel/file_protocol/file_read \
-			  robotkernel/file_protocol/file_write
+              robotkernel/file_protocol/file_write
 
 ln_messages.h: Makefile $(LN_MESSAGES)
 	@echo creating ln_messages.h
@@ -28,5 +23,5 @@ ln_messages.h: Makefile $(LN_MESSAGES)
 
 install-exec-hook:
 	mkdir -p $(prefix)/share
-	-cp -rf $(srcdir)/share/* $(prefix)/share/
+	-cp -rf $(top_srcdir)/share/* $(prefix)/share/
 

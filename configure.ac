@@ -16,9 +16,8 @@ if test -n "$SOURCE_ENV"; then
    source $SOURCE_ENV
 fi
 
-m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
-
 # Checks for programs.
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 AC_PROG_CXX
 AC_PROG_AWK
 AC_PROG_INSTALL
@@ -47,14 +46,7 @@ AC_SUBST(SET_MAKE)
 
 # setup rmpm
 RMPM_ARCH
-
-if test "$rmpm_host" == "arm-angstrom-linux-gnueabi"; then
-   ARCH_CFLAGS="-DNO_RDTSC"
-fi
-AC_SUBST(ARCH_CFLAGS)
-
 m4_esyscmd([scripts/m4_deps.py])
-
 RM_FIND_LN_FROM_ENV
 
 AC_DEFINE_UNQUOTED(BUILD_DATE,"`date -u`",[Date (usually date of extraction from SVN).])
@@ -76,7 +68,6 @@ AC_SUBST(DL_LIBS)
 
 
 AC_CONFIG_FILES([Makefile src/main/cpp/Makefile])
-AC_CONFIG_FILES([interface_file_protocol.pt], [cp interface_file_protocol.pt ${ac_abs_top_srcdir}])
 
 AC_OUTPUT
 
