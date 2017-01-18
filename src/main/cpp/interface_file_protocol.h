@@ -30,28 +30,31 @@
 #include "module_intf.h"
 #include "robotkernel/interface_base.h"
 
-#define LN_UNREGISTER_SERVICE_IN_BASE_DETOR  
-#include "ln_messages.h"
-#undef LN_UNREGISTER_SERVICE_IN_BASE_DETOR
-
 namespace interface_file_protocol {
     
-class file_protocol : 
-    public robotkernel::interface_base,
-    public ln_service_file_read_base,
-    public ln_service_file_write_base
-{
+class file_protocol : public robotkernel::interface_base {
     public:
         //! default construction
         /*!
          * \param node configuration node
          */
         file_protocol(const YAML::Node& node);
-	
-        int on_file_read(ln::service_request& req, 
-                ln_service_robotkernel_file_protocol_file_read& svc);
-        int on_file_write(ln::service_request& req, 
-                ln_service_robotkernel_file_protocol_file_write& svc);
+        
+        //! service callback request file read
+        /*!
+         * \param message service message
+         * \return success
+         */
+        int service_file_read(YAML::Node& message);
+        static const std::string service_definition_file_read;	
+
+        //! service callback request file write
+        /*!
+         * \param message service message
+         * \return success
+         */
+        int service_file_write(YAML::Node& message);
+        static const std::string service_definition_file_write;	
 };
 
 } // namespace interface

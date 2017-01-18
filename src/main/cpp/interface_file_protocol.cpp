@@ -25,7 +25,6 @@
  */
 
 #include <string.h>
-#include <string_util/string_util.h>
 
 #include "interface_file_protocol.h"
 #include "robotkernel/kernel.h"
@@ -61,94 +60,114 @@ char *strndup(const char *s, size_t n) {
 file_protocol::file_protocol(const YAML::Node& node) 
     : interface_base("file_protocol", node) {
     kernel& k = *kernel::get_instance();
-    if (!k.clnt)
-        throw robotkernel::str_exception("[interface_file_protocol|%s] "
-                "no ln_connection!\n", mod_name.c_str());
 
     stringstream base;
-    base << k.clnt->name << "." << mod_name << "." << dev_name << ".";
+    base << mod_name << "." << dev_name << ".file_protocol.";
 
-    register_file_read(k.clnt, base.str() + "file_protocol.file_read");
-    register_file_write(k.clnt, base.str() + "file_protocol.file_write");
+    k.add_service(mod_name, base.str() + "file_read", 
+            service_definition_file_read,
+            boost::bind(&file_protocol::service_file_read, this, _1));
+    k.add_service(mod_name, base.str() + "file_write", 
+            service_definition_file_write,
+            boost::bind(&file_protocol::service_file_write, this, _1));
 }
         
-int file_protocol::on_file_read(ln::service_request& req, 
-        ln_service_robotkernel_file_protocol_file_read& svc) {
+//! service callback request file read
+/*!
+ * \param message service message
+ * \return success
+ */
+int file_protocol::service_file_read(YAML::Node& message) {
+    string password = get_as<string>(message["request"], "password");
+    string file_name = get_as<string>(message["request"], "file_name");
+    
+    // default response values
+    std::vector<uint8_t> file_data;
+    message["response"]["file_data"] = file_data;
+    message["response"]["error_message"] = "";
+
     file_readwrite_info_t frwi;
     memset(&frwi, 0, sizeof(frwi));
     frwi.slave_id  = slave_id;
-    frwi.password  = strndup(svc.req.password, svc.req.password_len);
-    frwi.file_name = strndup(svc.req.file_name, svc.req.file_name_len);
+    frwi.password  = password.c_str();
+    frwi.file_name = file_name.c_str();
 
     // execute module request file read
     int ret = kernel::request_cb(mod_name.c_str(), 
             MOD_REQUEST_FILE_READ, (void *)&frwi);
     if (ret == -1) {
-        printf("got error\n");
-        if (frwi.error_message) 
-            svc.resp.error_message = frwi.error_message;
-        else
-            svc.resp.error_message = strdup("reading file failed!");
+        if (frwi.error_message) {
+            message["response"]["error_message"] = frwi.error_message;
+            free(frwi.error_message);
+        } else
+            message["response"]["error_message"] = "reading file failed!";
 
-        svc.resp.error_message_len = strlen(svc.resp.error_message);
-
-        goto exit;
+        return 0;
     }
 
-    if (frwi.file_data && (frwi.file_data_len > 0)) {
-        // copy file data
-        svc.resp.file_data_len = frwi.file_data_len;
-        svc.resp.file_data = (uint8_t *)malloc(frwi.file_data_len);
-        memcpy(svc.resp.file_data, frwi.file_data, frwi.file_data_len);
+    if (frwi.file_data) {
+        if (frwi.file_data_len > 0) {
+            // copy file data
+            file_data.resize(frwi.file_data_len);
+            file_data.assign(frwi.file_data, 
+                    frwi.file_data + frwi.file_data_len);
+        }
+
+        free(frwi.file_data);
     }
-
-exit:
-    req.respond();
-
-    if (frwi.password)
-        free(frwi.password);
-    if (frwi.file_name)
-        free(frwi.file_name);
-    if (svc.resp.error_message)
-        free(svc.resp.error_message);
-    if (svc.resp.file_data)
-        free(svc.resp.file_data);
 
     return 0;
 }
 
-int file_protocol::on_file_write(ln::service_request& req, 
-        ln_service_robotkernel_file_protocol_file_write& svc) {
+const std::string file_protocol::service_definition_file_read =
+    "request:\n"
+    "   string: password\n"
+    "   string: file_name\n"
+    "response:\n"
+    "   uint8_t*: file_data\n"
+    "   string: error_message\n";
+
+//! service callback request file write
+/*!
+ * \param message service message
+ * \return success
+ */
+int file_protocol::service_file_write(YAML::Node& message) {
+    string password = get_as<string>(message["request"], "password");
+    string file_name = get_as<string>(message["request"], "file_name");
+    std::vector<uint8_t> file_data = get_as<std::vector<uint8_t> >(
+            message["request"], "file_data");
+    
+    // default response values
+    message["response"]["error_message"] = "";
+
     file_readwrite_info_t frwi;
     memset(&frwi, 0, sizeof(frwi));
-    frwi.slave_id       = slave_id;
-    frwi.password       = strndup(svc.req.password, svc.req.password_len);
-    frwi.file_name      = strndup(svc.req.file_name, svc.req.file_name_len);
-    frwi.file_data      = svc.req.file_data;
-    frwi.file_data_len  = svc.req.file_data_len;
+    frwi.slave_id = slave_id;
+    frwi.password = password.c_str();
+    frwi.file_name = file_name.c_str();
+    frwi.file_data = &file_data[0];
+    frwi.file_data_len = file_data.size();
 
-    // execute module request file read
+    // execute module request file write
     int ret = kernel::request_cb(mod_name.c_str(), 
             MOD_REQUEST_FILE_WRITE, (void *)&frwi);
     if (ret == -1) {
-        if (frwi.error_message) 
-            svc.resp.error_message = frwi.error_message;
-        else
-            svc.resp.error_message = strdup("writing file failed!");
-
-        goto exit;
+        if (frwi.error_message) {
+            message["response"]["error_message"] = frwi.error_message;
+            free(frwi.error_message);
+        } else
+            message["response"]["error_message"] = "writing file failed!";
     }
-
-exit:
-    req.respond();
-
-    if (frwi.password)
-        free(frwi.password);
-    if (frwi.file_name)
-        free(frwi.file_name);
-    if (svc.resp.error_message)
-        free(svc.resp.error_message);
 
     return 0;
 }
+
+const std::string file_protocol::service_definition_file_write =
+    "request:\n"
+    "   string: password\n"
+    "   string: file_name\n"
+    "   uint8_t*: file_data\n"
+    "response:\n"
+    "   string: error_message\n";
 

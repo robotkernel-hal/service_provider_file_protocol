@@ -34,13 +34,13 @@
 
 //! file read 
 typedef struct file_readwrite_info {
-    int       slave_id;             //! [in]     slave id
-    char*     password;             //! [in]     file password (NULL-terminated)
-    char*     file_name;            //! [in]     file name (NULL-terminated)
+    int             slave_id;       //! [in]     slave id
+    const char*     password;       //! [in]     file password (NULL-terminated)
+    const char*     file_name;      //! [in]     file name (NULL-terminated)
 
-    uint8_t*  file_data;            //! [in/out] file data, allocated by read: module, write: interface
-    ssize_t   file_data_len;        //! [in/out] length of file data
-    char*     error_message;        //! [out]    NULL or error-message, allocated 
+    uint8_t*        file_data;      //! [in/out] file data, allocated by read: module, write: interface
+    ssize_t         file_data_len;  //! [in/out] length of file data
+    char*           error_message;  //! [out]    NULL or error-message, allocated 
                                     //           by module (NULL-terminated)
 } file_readwrite_info_t;
 
