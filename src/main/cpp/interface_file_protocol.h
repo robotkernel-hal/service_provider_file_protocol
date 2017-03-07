@@ -24,40 +24,75 @@
  * along with robotkernel.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __INTERFACE_FILE_PROTOCOL_H__
-#define __INTERFACE_FILE_PROTOCOL_H__
+#ifndef __INTERFACE_file_protocol_handler_H__
+#define __INTERFACE_file_protocol_handler_H__
 
-#include "module_intf.h"
-#include "robotkernel/interface_base.h"
+#include "robotkernel/service_provider_base.h"
+#include "robotkernel/service_provider_intf.h"
+#include "robotkernel/service.h"
+#include "robotkernel/kernel.h"
+#include "robotkernel/log_base.h"
 
 namespace interface_file_protocol {
-    
-class file_protocol : public robotkernel::interface_base {
-    public:
-        //! default construction
-        /*!
-         * \param node configuration node
-         */
-        file_protocol(const YAML::Node& node);
-        
-        //! service callback request file read
-        /*!
-         * \param message service message
-         * \return success
-         */
-        int service_file_read(YAML::Node& message);
-        static const std::string service_definition_file_read;	
+	extern const char* file_protocol_sp_magic;
 
-        //! service callback request file write
-        /*!
-         * \param message service message
-         * \return success
-         */
-        int service_file_write(YAML::Node& message);
-        static const std::string service_definition_file_write;	
-};
+	// forward declaration
+	class file_protocol_handler;
+
+	class file_protocol : 
+		public robotkernel::service_provider_base<file_protocol_handler> {
+			public:
+				//! default construction
+				/*!
+				 * \param node configuration node
+				 */
+				file_protocol()
+					: service_provider_base("file_protocol") {};
+
+				~file_protocol() {};
+
+				//! service provider magic 
+				/*!
+				 * \return return service provider magic string
+				 */
+				const char* get_sp_magic() 
+				{ return file_protocol_sp_magic; };
+	};
+
+	class file_protocol_handler : public robotkernel::log_base {
+		public:
+			std::string mod_name;	//!< slave owner module
+			std::string dev_name;	//!< service device name
+			int slave_id;			//!< slave identifier
+
+			//! handler construction
+			file_protocol_handler(std::string mod_name, std::string dev_name, int slave_id);
+
+			//! handler destruction
+			~file_protocol_handler();
+
+			//! service callback request file read
+			/*!
+			 * \param request service request data
+			 * \parma response service response data
+			 * \return success
+			 */
+			int service_file_read(const robotkernel::service_arglist_t& request, 
+					robotkernel::service_arglist_t& response);
+			static const std::string service_definition_file_read;	
+
+			//! service callback request file write
+			/*!
+			 * \param request service request data
+			 * \parma response service response data
+			 * \return success
+			 */
+			int service_file_write(const robotkernel::service_arglist_t& request, 
+					robotkernel::service_arglist_t& response);
+			static const std::string service_definition_file_write;	
+	};
 
 } // namespace interface
 
-#endif // __INTERFACE_FILE_PROTOCOL_H__
+#endif // __INTERFACE_file_protocol_handler_H__
 
