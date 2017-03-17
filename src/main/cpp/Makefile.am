@@ -1,27 +1,15 @@
 
 libdir = $(prefix)/lib
-lib_LTLIBRARIES = libinterface_file_protocol.la
-BUILT_SOURCES = ln_messages.h
-CLEANFILES = ln_messages.h
+lib_LTLIBRARIES = libservice_provider_file_protocol.la
 
-libinterface_file_protocol_la_SOURCES  = interface_file_protocol.cpp
+extraincludedir = $(includedir)/service_provider/file_protocol
+extrainclude_HEADERS = include/service_provider/file_protocol/base.h
 
-libinterface_file_protocol_la_CXXFLAGS = --std=c++11 -fno-strict-aliasing -Wall -I$(srcdir) -I$(builddir) \
-                                         @ROBOTKERNEL_CFLAGS@ @LIBSTRING_UTIL_CFLAGS@ @YAML_CPP_RMC_CFLAGS@
-
-libinterface_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION)
-
-VPATH = $(srcdir):$(top_srcdir)/share/ln/message_definitions
-
-LN_MESSAGES = robotkernel/file_protocol/file_read \
-              robotkernel/file_protocol/file_write
-
-ln_messages.h: Makefile $(LN_MESSAGES)
-	@echo creating ln_messages.h
-	@LN_GENERATE@ -o $@ $(LN_MESSAGES)
-	touch $@
-
-install-exec-hook:
-	mkdir -p $(prefix)/share
-	-cp -rf $(top_srcdir)/share/* $(prefix)/share/
+libservice_provider_file_protocol_la_SOURCES  = provider.cpp
+libservice_provider_file_protocol_la_CXXFLAGS = --std=c++11 -fno-strict-aliasing -Wall 			\
+												-I$(srcdir) -I$(builddir) -I$(srcdir)/include 	\
+												@ROBOTKERNEL_CFLAGS@ 							\
+												@LIBSTRING_UTIL_CFLAGS@ 						\
+												@YAML_CPP_RMC_CFLAGS@
+libservice_provider_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION)
 
