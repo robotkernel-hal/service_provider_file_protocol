@@ -1,7 +1,0 @@
-service
-request
-char* password
-char* file_name
-uint8_t* file_data
-response
-char* error_message
