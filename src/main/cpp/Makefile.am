@@ -10,6 +10,6 @@ libservice_provider_file_protocol_la_CXXFLAGS = --std=c++11 -fno-strict-aliasing
 												-I$(srcdir) -I$(builddir) -I$(srcdir)/include 	\
 												@ROBOTKERNEL_CFLAGS@ 							\
 												@LIBSTRING_UTIL_CFLAGS@ 						\
-												@YAML_CPP_RMC_CFLAGS@
+												@YAML_CPP_CFLAGS@
 libservice_provider_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION)
 
