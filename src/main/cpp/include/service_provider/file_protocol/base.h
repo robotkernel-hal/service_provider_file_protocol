@@ -61,6 +61,8 @@ namespace service_provider {
                  */
                 virtual void file_write(const file_readwrite_info_t& info) = 0;
         };
+        
+        inline base::~base() { }
 
     }; // namespace file_protocol
 
