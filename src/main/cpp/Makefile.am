@@ -1,5 +1,4 @@
 
-libdir = $(prefix)/lib
 lib_LTLIBRARIES = libservice_provider_file_protocol.la
 
 extraincludedir = $(includedir)/service_provider/file_protocol
