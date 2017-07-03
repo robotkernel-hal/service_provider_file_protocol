@@ -42,8 +42,8 @@ using namespace string_util;
 /*!
  * \param node configuration node
  */
-file_protocol::handler::handler(const robotkernel::sp_service_requester_t& req) 
-    : log_base("file_protocol", req->owner + "." + req->service_prefix + ".file_protocol") {
+file_protocol::handler::handler(const robotkernel::sp_service_collector_device_t& req) 
+    : log_base("file_protocol", req->owner + "." + req->device_name + ".file_protocol") {
     robotkernel::kernel& k = *robotkernel::kernel::get_instance();
 
     _instance = std::dynamic_pointer_cast<service_provider::file_protocol::base>(req);
@@ -51,7 +51,7 @@ file_protocol::handler::handler(const robotkernel::sp_service_requester_t& req)
         throw str_exception("wrong base class");
 
     stringstream base;
-    base << _instance->owner << "." << _instance->service_prefix << ".file_protocol.";
+    base << _instance->owner << "." << _instance->device_name << ".file_protocol.";
 
     k.add_service(_instance->owner, base.str() + "file_read", 
             service_definition_file_read,
@@ -66,7 +66,7 @@ file_protocol::handler::~handler() {
     kernel& k = *kernel::get_instance();
 
     stringstream base;
-    base << _instance->owner << "." << _instance->service_prefix << ".file_protocol.";
+    base << _instance->owner << "." << _instance->device_name << ".file_protocol.";
     k.remove_service(base.str() + "file_read");
     k.remove_service(base.str() + "file_write");
 }
