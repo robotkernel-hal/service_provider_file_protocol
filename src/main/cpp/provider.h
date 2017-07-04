@@ -56,7 +56,7 @@ namespace service_provider {
                 sp_cp_base_t _instance;
 
                 //! handler construction
-                handler(const robotkernel::sp_service_collector_device_t& req);
+                handler(const robotkernel::sp_service_interface_t& req);
 
                 //! handler destruction
                 ~handler();
