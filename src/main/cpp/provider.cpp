@@ -50,13 +50,10 @@ file_protocol::handler::handler(const robotkernel::sp_service_interface_t& req)
     if (!_instance)
         throw str_exception("wrong base class");
 
-    stringstream base;
-    base << _instance->device_name << ".file_protocol.";
-
-    k.add_service(_instance->owner, base.str() + "file_read", 
+    k.add_service(_instance->owner, _instance->device_name + ".file_read", 
             service_definition_file_read,
             std::bind(&file_protocol::handler::service_file_read, this, _1, _2));
-    k.add_service(_instance->owner, base.str() + "file_write", 
+    k.add_service(_instance->owner, _instance->device_name + ".file_write", 
             service_definition_file_write,
             std::bind(&file_protocol::handler::service_file_write, this, _1, _2));
 }
@@ -64,11 +61,8 @@ file_protocol::handler::handler(const robotkernel::sp_service_interface_t& req)
 //! handler destruction
 file_protocol::handler::~handler() {
     kernel& k = *kernel::get_instance();
-
-    stringstream base;
-    base << _instance->device_name << ".file_protocol.";
-    k.remove_service(_instance->owner, base.str() + "file_read");
-    k.remove_service(_instance->owner, base.str() + "file_write");
+    k.remove_service(_instance->owner, _instance->device_name + ".file_read");
+    k.remove_service(_instance->owner, _instance->device_name + ".file_write");
 }
 
 //! service callback request file read
