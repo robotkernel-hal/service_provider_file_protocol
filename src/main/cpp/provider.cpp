@@ -105,11 +105,11 @@ int file_protocol::handler::service_file_read(
 
 const std::string file_protocol::handler::service_definition_file_read =
 "request:\n"
-"   string: password\n"
-"   string: file_name\n"
+"- string: password\n"
+"- string: file_name\n"
 "response:\n"
-"   vector/uint8_t: file_data\n"
-"   string: error_message\n";
+"- vector/uint8_t: file_data\n"
+"- string: error_message\n";
 
 //! service callback request file write
 /*!
@@ -150,9 +150,9 @@ int file_protocol::handler::service_file_write(
 
 const std::string file_protocol::handler::service_definition_file_write =
 "request:\n"
-"   string: password\n"
-"   string: file_name\n"
-"   vector/uint8_t: file_data\n"
+"- string: password\n"
+"- string: file_name\n"
+"- vector/uint8_t: file_data\n"
 "response:\n"
-"   string: error_message\n";
+"- string: error_message\n";
 
