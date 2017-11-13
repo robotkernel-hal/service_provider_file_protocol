@@ -10,3 +10,7 @@ libservice_provider_file_protocol_la_CXXFLAGS = --std=c++11 -fno-strict-aliasing
 												@ROBOTKERNEL_CFLAGS@ 
 libservice_provider_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION)
 
+install-exec-hook:
+	mkdir -p $(prefix)/share/ln
+	-cp -rf $(top_srcdir)/share/ln/* $(prefix)/share/ln/
+	-cp -rf $(top_builddir)/share/ln/* $(prefix)/share/ln/
