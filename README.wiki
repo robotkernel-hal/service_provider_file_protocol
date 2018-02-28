@@ -1,0 +1,36 @@
+That service provider suppliles services for all robotkernel modules with support for file protocol devices. The service provider will provide acyclic calls for file up- and downloads.
+
+= Configuration =
+
+No specific configuration is needed for the service provider. The robotkernel just needs to know which service provider to load. To load der ''service_provider_file_protocol'' just add it to your config file.
+
+ service_providers:
+ - name: file_sp
+   so_file: libservice_provider_file_protocol.so
+
+= Services =
+
+; file_read
+: This service reads/uploads a file from a device. A ''file_name'' and an optional ''password'' must be given. The file content will be returned in the ''file_data'' field. On error, the ''error_message'' field will be filled with the error cause.
+
+ request:
+ - string: password
+ - string: file_name
+ response:
+ - vector/uint8_t: file_data
+ - string: error_message
+
+; file_write
+: This service writes/downloads a file toa device. A ''file_name'' and an optional ''password'' must be given. The file content must be provided in the ''file_data'' field. On error, the ''error_message'' field will be filled with the error cause.
+
+ request:
+ - string: password
+ - string: file_name
+ - vector/uint8_t: file_data
+ response:
+ - string: error_message
+
+All of these services will be available through a robotkernel brigdge (e.g. [[robotkernel-5/bridge_ln|bridge_ln]], [[robotkernel-5/bridge_jsonrpc|bridge_jsonrpc]], [[robotkernel-5/bridge_cli|bridge_cli]], ...)
+
+[[Category:Robotkernel-5|Serice Provider File Protocol]]
+
