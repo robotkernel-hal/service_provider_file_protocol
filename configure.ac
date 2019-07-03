@@ -40,8 +40,7 @@ AC_CHECK_LIB(dl, dlopen)
 
 AC_CONFIG_FILES([Makefile 
                  src/main/cpp/Makefile 
-                 service_provider_file_protocol.pc 
-                 share/ln/service_provider_file_protocol.inc.lnc])
+                 service_provider_file_protocol.pc ])
 
 AC_OUTPUT
 
