@@ -104,6 +104,7 @@ int file_protocol::handler::service_file_read(
 }
 
 const std::string file_protocol::handler::service_definition_file_read =
+"name: service_provider/file_protocol/file_read\n"
 "request:\n"
 "- string: password\n"
 "- string: file_name\n"
@@ -149,6 +150,7 @@ int file_protocol::handler::service_file_write(
 }
 
 const std::string file_protocol::handler::service_definition_file_write =
+"name: service_provider/file_protocol/file_write\n"
 "request:\n"
 "- string: password\n"
 "- string: file_name\n"
