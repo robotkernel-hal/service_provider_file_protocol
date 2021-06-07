@@ -22,11 +22,12 @@ import numpy as np
 import helpers
 
 class file_protocol_device(helpers.svc_wrapper):
-    def __init__(self, clnt, prefix, view):
-        helpers.svc_wrapper.__init__(self, clnt, prefix)
-        self.clnt = clnt
-        self.view = view
-        self.name = '.'.join(prefix.split('.')[:-1])
+    def __init__(self, service_prefix, app, widget, modname, devname):
+        helpers.svc_wrapper.__init__(self, app.clnt,
+                "%s.%s.%s.file_protocol" % (service_prefix, modname, devname))
+        self.modname = modname
+        self.devname = devname
+        self.widget = widget
 
     def write_file(self, remote_filename, password, local_filename):
         self.file_write.req.file_name = remote_filename

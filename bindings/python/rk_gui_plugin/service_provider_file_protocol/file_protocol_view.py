@@ -27,15 +27,31 @@ class file_protocol_view(helpers.service_provider_view, helpers.builder_base):
         helpers.builder_base.__init__(self, fn, 'vbox_file_protocol')
         helpers.service_provider_view.__init__(self, parent.app, parent, self.vbox_file_protocol, 'file_read')
 
+        self.devices = {}
+        self.current_device = None
+
+        liststore = gtk.ListStore(gobject.TYPE_STRING)
+        self.combobox_write_file_name.set_model(liststore)
+
+        liststore.append(["ECATFW__slave.bin"])
+        liststore.append(["ECATFW__bootloader.bin"])
+
         container.pack_start(self.vbox_file_protocol, True, True)
 
+
     def show(self, modname, devname):
+        modidx = (modname, devname)
+        if modidx not in self.devices:
+            self.devices[modidx] = file_protocol_wrapper.file_protocol_device(
+                    self.service_prefix, self.app, self.vbox_file_protocol, modname, devname)
+
+        self.current_device = self.devices[modidx]
         helpers.service_provider_view.show(self)
 
     def on_button_write_file_clicked(self, btn):
-        write_filename = self.entry_write_filename.get_text()
+        write_filename = self.combobox_write_file_name.get_active_text()
         write_password = self.entry_write_password.get_text()
         file_name = self.filechooserbutton_write_file.get_filename()
 
-        self.dev.write_file(write_filename, write_password, file_name)
+        self.current_device.write_file(write_filename, write_password, file_name)
 
