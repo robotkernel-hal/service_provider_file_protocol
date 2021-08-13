@@ -77,7 +77,7 @@ int file_protocol::handler::service_file_read(
     // request data
 #define FILE_READ_REQ_PASSWORD      0
 #define FILE_READ_REQ_FILE_NAME     1
-    string password  = request[FILE_READ_REQ_PASSWORD];
+    uint32_t password  = request[FILE_READ_REQ_PASSWORD];
     string file_name = request[FILE_READ_REQ_FILE_NAME];
 
     file_readwrite_info_t info = { password, file_name };
@@ -106,7 +106,7 @@ int file_protocol::handler::service_file_read(
 const std::string file_protocol::handler::service_definition_file_read =
 "name: service_provider/file_protocol/file_read\n"
 "request:\n"
-"- string: password\n"
+"- uint32_t: password\n"
 "- string: file_name\n"
 "response:\n"
 "- vector/uint8_t: file_data\n"
@@ -125,7 +125,7 @@ int file_protocol::handler::service_file_write(
 #define FILE_READ_REQ_PASSWORD      0
 #define FILE_READ_REQ_FILE_NAME     1
 #define FILE_READ_REQ_FILE_DATA     2
-    string password  = request[FILE_READ_REQ_PASSWORD];
+    uint32_t password  = request[FILE_READ_REQ_PASSWORD];
     string file_name = request[FILE_READ_REQ_FILE_NAME];
     std::vector<rk_type> file_data = request[FILE_READ_REQ_FILE_DATA];
 
@@ -152,7 +152,7 @@ int file_protocol::handler::service_file_write(
 const std::string file_protocol::handler::service_definition_file_write =
 "name: service_provider/file_protocol/file_write\n"
 "request:\n"
-"- string: password\n"
+"- uint32_t: password\n"
 "- string: file_name\n"
 "- vector/uint8_t: file_data\n"
 "response:\n"

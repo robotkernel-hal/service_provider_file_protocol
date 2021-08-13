@@ -35,7 +35,7 @@ namespace service_provider {
 
         //! file read 
         typedef struct file_readwrite_info {
-            std::string          password;   //! [in]     file password
+            uint32_t             password;   //! [in]     file password
             std::string          file_name;  //! [in]     file name
             std::vector<uint8_t> file_data;  //! [in/out] file data
         } file_readwrite_info_t;
