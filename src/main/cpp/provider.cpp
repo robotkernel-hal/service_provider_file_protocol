@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include "provider.h"
+#include "mds.h"
 
 #include "robotkernel/kernel.h"
 #include "robotkernel/exceptions.h"
@@ -103,15 +104,6 @@ int file_protocol::handler::service_file_read(
     return 0;
 }
 
-const std::string file_protocol::handler::service_definition_file_read =
-"name: service_provider/file_protocol/file_read\n"
-"request:\n"
-"- uint32_t: password\n"
-"- string: file_name\n"
-"response:\n"
-"- vector/uint8_t: file_data\n"
-"- string: error_message\n";
-
 //! service callback request file write
 /*!
  * \param request service request data
@@ -148,13 +140,4 @@ int file_protocol::handler::service_file_write(
 
     return 0;
 }
-
-const std::string file_protocol::handler::service_definition_file_write =
-"name: service_provider/file_protocol/file_write\n"
-"request:\n"
-"- uint32_t: password\n"
-"- string: file_name\n"
-"- vector/uint8_t: file_data\n"
-"response:\n"
-"- string: error_message\n";
 
