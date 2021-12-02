@@ -75,7 +75,6 @@ class handler : public robotkernel::log_base {
          */
         int service_file_read(const robotkernel::service_arglist_t& request, 
                 robotkernel::service_arglist_t& response);
-        static const std::string service_definition_file_read;  
 
         //! service callback request file write
         /*!
@@ -85,7 +84,6 @@ class handler : public robotkernel::log_base {
          */
         int service_file_write(const robotkernel::service_arglist_t& request, 
                 robotkernel::service_arglist_t& response);
-        static const std::string service_definition_file_write; 
 };
 
 #ifdef EMACS
