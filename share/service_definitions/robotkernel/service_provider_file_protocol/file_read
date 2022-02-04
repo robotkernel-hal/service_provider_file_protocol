@@ -1,0 +1,8 @@
+name: service_provider_file_protocol/file_read
+request:
+- uint32_t: password
+- string: file_name
+response:
+- vector/uint8_t: file_data
+- string: error_message
+

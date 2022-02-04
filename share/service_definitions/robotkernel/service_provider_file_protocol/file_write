@@ -1,0 +1,8 @@
+name: service_provider_file_protocol/file_write
+request:
+- uint32_t: password
+- string: file_name
+- vector/uint8_t: file_data
+response:
+- string: error_message
+

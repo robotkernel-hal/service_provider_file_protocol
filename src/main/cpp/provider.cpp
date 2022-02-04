@@ -25,7 +25,7 @@
 #include <string.h>
 
 #include "provider.h"
-#include "mds.h"
+#include "service_definitions.h"
 
 #include "robotkernel/kernel.h"
 #include "robotkernel/exceptions.h"
@@ -38,6 +38,9 @@ using namespace std::placeholders;
 using namespace robotkernel;
 using namespace service_provider;
 using namespace string_util;
+
+const std::string service_provider::file_protocol::handler::service_definition_file_read = robotkernel_service_provider_file_protocol_file_read_service_definition;
+const std::string service_provider::file_protocol::handler::service_definition_file_write = robotkernel_service_provider_file_protocol_file_write_service_definition;
 
 //! default construction
 /*!
