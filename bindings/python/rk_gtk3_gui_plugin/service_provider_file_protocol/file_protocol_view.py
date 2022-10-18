@@ -17,9 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Robotkernel-GUI.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import os, sys, traceback, yaml, gtk, gobject
+import os, sys, traceback, yaml
 import file_protocol_wrapper
 import helpers
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GLib', '2.0')
+from gi.repository import Gtk
+from gi.repository import GObject
 
 class file_protocol_view(helpers.service_provider_view, helpers.builder_base):
     def __init__(self, parent, container):
@@ -30,7 +36,7 @@ class file_protocol_view(helpers.service_provider_view, helpers.builder_base):
         self.devices = {}
         self.current_device = None
 
-        liststore = gtk.ListStore(gobject.TYPE_STRING)
+        liststore = Gtk.ListStore(GObject.TYPE_STRING)
         self.combobox_write_file_name.set_model(liststore)
 
         liststore.append(["ECATFW__slave.bin"])
