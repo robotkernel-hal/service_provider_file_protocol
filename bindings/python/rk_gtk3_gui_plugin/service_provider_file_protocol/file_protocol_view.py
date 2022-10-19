@@ -42,7 +42,7 @@ class file_protocol_view(helpers.service_provider_view, helpers.builder_base):
         liststore.append(["ECATFW__slave.bin"])
         liststore.append(["ECATFW__bootloader.bin"])
 
-        container.pack_start(self.vbox_file_protocol, True, True)
+        container.pack_start(self.vbox_file_protocol, True, True, 0)
 
 
     def show(self, modname, devname):
