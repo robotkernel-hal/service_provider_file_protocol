@@ -16,9 +16,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Robotkernel-GUI.  If not, see <http://www.gnu.org/licenses/>.
 '''
+from __future__ import absolute_import
 
 import os, sys, traceback, yaml
-import file_protocol_wrapper
+from . import file_protocol_wrapper
 import helpers
 
 import gi
