@@ -22,6 +22,7 @@ import time, traceback
 import numpy as np
 import helpers
 
+
 class file_protocol_device(helpers.svc_wrapper):
     def __init__(self, service_prefix, app, widget, modname, devname):
         helpers.svc_wrapper.__init__(self, app.clnt,
@@ -58,7 +59,9 @@ class file_protocol_device(helpers.svc_wrapper):
         self.async_read_memory.req.data_adr = start_adr
         self.async_read_memory.req.data_len = min(bs, end_adr - start_adr)
         self.async_read_memory.call_async()
-        self.async_read_memory.gobject_on_async_finish(cb_read_memory, time.time())
+        
+        #self.async_read_memory.gobject_on_async_finish(cb_read_memory, time.time())
+        self.canopen_device.svc_read_object.mainloop_on_async_finish(self.async_loop, cb_read, time.time())
 
     def update(self, start_adr, end_adr, view):
         self.buf = []
