@@ -61,7 +61,7 @@ class file_protocol_device(helpers.svc_wrapper):
         self.async_read_memory.call_async()
         
         #self.async_read_memory.gobject_on_async_finish(cb_read_memory, time.time())
-        self.async_read_memory.mainloop_on_async_finish(self.async_loop, cb_read, time.time())
+        self.async_read_memory.mainloop_on_async_finish(self._mainloop, cb_read, time.time())
 
     def update(self, start_adr, end_adr, view):
         self.buf = []
