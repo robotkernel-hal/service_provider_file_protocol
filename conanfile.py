@@ -8,7 +8,7 @@ class MainProject(ConanFile):
     name = "service_provider_file_protocol"
     url = "https://rmc-github.robotic.dlr.de/robotkernel/service_provider_file_protocol"
     description = "robotkernel service provider for file protocol devices."
-    exports_sources = ["*", "!.gitignore"] + ["!%s" % x for x in tools.Git().excluded_files()]
+    exports_sources = ["*", "!.gitignore", "!bindings"] + ["!%s" % x for x in tools.Git().excluded_files()]
 
     def requirements(self):
         self.requires(f"{self.name}_ln_msgdef/{self.version}@{self.user}/{self.channel}")
