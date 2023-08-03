@@ -39,108 +39,50 @@ using namespace robotkernel;
 using namespace service_provider;
 using namespace string_util;
 
-const std::string service_provider::file_protocol::handler::service_definition_file_read = robotkernel_service_provider_file_protocol_file_read_service_definition;
-const std::string service_provider::file_protocol::handler::service_definition_file_write = robotkernel_service_provider_file_protocol_file_write_service_definition;
-
 //! default construction
 /*!
  * \param node configuration node
  */
 file_protocol::handler::handler(const robotkernel::sp_service_interface_t& req) 
-    : log_base(req->owner, "file_protocol", req->device_name) {
-    robotkernel::kernel& k = *robotkernel::kernel::get_instance();
-
+    : log_base(req->owner, "file_protocol", req->device_name) 
+{
     _instance = std::dynamic_pointer_cast<service_provider::file_protocol::base>(req);
     if (!_instance)
         throw str_exception("wrong base class");
 
-    k.add_service(_instance->owner, _instance->device_name + ".file_read", 
-            service_definition_file_read,
-            std::bind(&file_protocol::handler::service_file_read, this, _1, _2));
-    k.add_service(_instance->owner, _instance->device_name + ".file_write", 
-            service_definition_file_write,
-            std::bind(&file_protocol::handler::service_file_write, this, _1, _2));
+    add_svc_file_read(_instance->owner, _instance->device_name + ".file_read");
+    add_svc_file_write(_instance->owner, _instance->device_name + ".file_write");
 }
 
-//! handler destruction
-file_protocol::handler::~handler() {
-    kernel& k = *kernel::get_instance();
-    k.remove_service(_instance->owner, _instance->device_name + ".file_read");
-    k.remove_service(_instance->owner, _instance->device_name + ".file_write");
-}
-
-//! service callback request file read
+//! svc_file_read
 /*!
- * \param request service request data
- * \param response service response data
- * \return success
+ * \param[in]   req     Service request data.
+ * \param[out]  resp    Service response data.
  */
-int file_protocol::handler::service_file_read(
-        const robotkernel::service_arglist_t& request, 
-        robotkernel::service_arglist_t& response) {
-    // request data
-#define FILE_READ_REQ_PASSWORD      0
-#define FILE_READ_REQ_FILE_NAME     1
-    uint32_t password  = request[FILE_READ_REQ_PASSWORD];
-    string file_name = request[FILE_READ_REQ_FILE_NAME];
-
-    file_readwrite_info_t info = { password, file_name };
+void file_protocol::handler::svc_file_read(const struct svc_req_file_read& req, struct svc_resp_file_read& resp) {
+    file_readwrite_info_t info = { req.password, req.file_name };
     
-    // default response values
-    string error_message = "";
-    std::vector<rk_type> file_data;
-
     try {
         _instance->file_read(info);
-        file_data.assign(info.file_data.begin(), info.file_data.end());
+        resp.file_data.assign(info.file_data.begin(), info.file_data.end());
     } catch (std::exception& e) {
-        error_message = e.what();
+        resp.error_message = e.what();
     }
-                            
-    // response data
-#define FILE_READ_RESP_FILE_DATA        0
-#define FILE_READ_RESP_ERROR_MESSAGE    1
-    response.resize(2);
-    response[FILE_READ_RESP_FILE_DATA]      = file_data;
-    response[FILE_READ_RESP_ERROR_MESSAGE]  = error_message;
-
-    return 0;
 }
 
-//! service callback request file write
+//! svc_file_write
 /*!
- * \param request service request data
- * \param response service response data
- * \return success
+ * \param[in]   req     Service request data.
+ * \param[out]  resp    Service response data.
  */
-int file_protocol::handler::service_file_write(
-        const robotkernel::service_arglist_t& request, 
-        robotkernel::service_arglist_t& response) {
-    // request data
-#define FILE_READ_REQ_PASSWORD      0
-#define FILE_READ_REQ_FILE_NAME     1
-#define FILE_READ_REQ_FILE_DATA     2
-    uint32_t password  = request[FILE_READ_REQ_PASSWORD];
-    string file_name = request[FILE_READ_REQ_FILE_NAME];
-    std::vector<rk_type> file_data = request[FILE_READ_REQ_FILE_DATA];
-
-    file_readwrite_info_t info = { password, file_name };
-    info.file_data.assign(file_data.begin(), file_data.end());
-
-    // default response values
-    string error_message = "";
+void file_protocol::handler::svc_file_write(const struct svc_req_file_write& req, struct svc_resp_file_write& resp) {
+    file_readwrite_info_t info = { req.password, req.file_name };
+    info.file_data.assign(req.file_data.begin(), req.file_data.end());
 
     try {
         _instance->file_write(info);
     } catch (std::exception& e) {
-        error_message = e.what();
+        resp.error_message = e.what();
     }
-
-    // response data
-#define FILE_WRITE_RESP_ERROR_MESSAGE    0
-    response.resize(1);
-    response[FILE_WRITE_RESP_ERROR_MESSAGE]  = error_message;
-
-    return 0;
 }
 

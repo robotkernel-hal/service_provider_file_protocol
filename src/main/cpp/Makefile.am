@@ -16,8 +16,8 @@ libservice_provider_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION
 
 VPATH = $(srcdir):$(top_srcdir)/share/service_definitions
 
-SERVICE_DEFINITIONS = robotkernel/service_provider_file_protocol/file_read \
-					  robotkernel/service_provider_file_protocol/file_write
+SERVICE_DEFINITIONS = service_provider/file_protocol/file_read \
+					  service_provider/file_protocol/file_write
 
 $(top_builddir)/src/main/cpp/service_definitions.h: Makefile $(SERVICE_DEFINITIONS)
 	install -d $(top_builddir)/src/main/cpp/include/robotkernel
