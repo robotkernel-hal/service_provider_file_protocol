@@ -22,7 +22,8 @@
  * along with robotkernel.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
+#include <string>
+#include <stdexcept>
 
 #include "provider.h"
 #include "service_definitions.h"
@@ -30,24 +31,22 @@
 #include "robotkernel/exceptions.h"
 
 SERVICE_PROVIDER_DEF(file_protocol, 
-        service_provider::file_protocol::provider);
+        service_provider_file_protocol::provider);
 
 using namespace std;
-using namespace std::placeholders;
 using namespace robotkernel;
-using namespace service_provider;
-using namespace string_util;
+using namespace service_provider_file_protocol;
 
 //! default construction
 /*!
  * \param node configuration node
  */
-file_protocol::handler::handler(const robotkernel::sp_service_interface_t& req) 
+handler::handler(const robotkernel::sp_service_interface_t& req) 
     : log_base(req->owner, "file_protocol", req->device_name) 
 {
-    _instance = std::dynamic_pointer_cast<service_provider::file_protocol::base>(req);
+    _instance = std::dynamic_pointer_cast<service_provider_file_protocol::base>(req);
     if (!_instance)
-        throw str_exception("wrong base class");
+        throw runtime_error("wrong base class");
 
     add_svc_file_read(_instance->owner, _instance->device_name + ".file_read");
     add_svc_file_write(_instance->owner, _instance->device_name + ".file_write");
@@ -58,7 +57,7 @@ file_protocol::handler::handler(const robotkernel::sp_service_interface_t& req)
  * \param[in]   req     Service request data.
  * \param[out]  resp    Service response data.
  */
-void file_protocol::handler::svc_file_read(const struct svc_req_file_read& req, struct svc_resp_file_read& resp) {
+void handler::svc_file_read(const struct svc_req_file_read& req, struct svc_resp_file_read& resp) {
     file_readwrite_info_t info = { req.password, req.file_name };
     
     try {
@@ -74,7 +73,7 @@ void file_protocol::handler::svc_file_read(const struct svc_req_file_read& req, 
  * \param[in]   req     Service request data.
  * \param[out]  resp    Service response data.
  */
-void file_protocol::handler::svc_file_write(const struct svc_req_file_write& req, struct svc_resp_file_write& resp) {
+void handler::svc_file_write(const struct svc_req_file_write& req, struct svc_resp_file_write& resp) {
     file_readwrite_info_t info = { req.password, req.file_name };
     info.file_data.assign(req.file_data.begin(), req.file_data.end());
 

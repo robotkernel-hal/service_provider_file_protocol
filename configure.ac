@@ -39,7 +39,7 @@ AC_CHECK_FUNCS([strdup])
 AC_CHECK_LIB(dl, dlopen)
 
 AC_CONFIG_FILES([Makefile 
-                 src/main/cpp/Makefile 
+                 src/Makefile 
                  service_provider_file_protocol.pc ])
 
 AC_OUTPUT

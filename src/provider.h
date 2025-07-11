@@ -22,8 +22,8 @@
  * along with robotkernel.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SERVICE_PROVIDER__FILE_PROTOCOL__PROVIDER_H__
-#define __SERVICE_PROVIDER__FILE_PROTOCOL__PROVIDER_H__
+#ifndef SERVICE_PROVIDER_FILE_PROTOCOL__PROVIDER_H
+#define SERVICE_PROVIDER_FILE_PROTOCOL__PROVIDER_H
 
 // Robotkernel includes
 #include "robotkernel/service_provider_base.h"
@@ -31,11 +31,10 @@
 #include "robotkernel/log_base.h"
 
 // Service provider includes
-#include "service_provider/file_protocol/base.h"
+#include "service_provider_file_protocol/base.h"
 #include "service_definitions.h"
 
-namespace service_provider {
-namespace file_protocol {
+namespace service_provider_file_protocol {
 
 // forward declaration
 class handler;
@@ -56,7 +55,7 @@ class handler :
     public svc_base_file_write
 {
     public:
-        typedef std::shared_ptr<service_provider::file_protocol::base> sp_cp_base_t;
+        typedef std::shared_ptr<service_provider_file_protocol::base> sp_cp_base_t;
         sp_cp_base_t _instance;
 
         static const std::string service_definition_file_read;
@@ -83,8 +82,7 @@ class handler :
         virtual void svc_file_write(const struct svc_req_file_write& req, struct svc_resp_file_write& resp);
 };
 
-}; // namespace file_protocol
-}; // namespace service_provider
+}; // namespace service_provider_file_protocol
 
-#endif // __SERVICE_PROVIDER__FILE_PROTOCOL__PROVIDER_H__
+#endif // SERVICE_PROVIDER_FILE_PROTOCOL__PROVIDER_H
 
