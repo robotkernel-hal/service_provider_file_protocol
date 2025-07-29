@@ -1,4 +1,4 @@
-name: service_provider/file_protocol/file_write
+name: service_provider_file_protocol/file_write
 request:
 - uint32_t: password
 - string: file_name
