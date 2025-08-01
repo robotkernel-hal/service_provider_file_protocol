@@ -14,10 +14,14 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: robotkernel-dev (= ${binary:Version}), ${misc:Depends}
-Description: TODO
+Description: Robotkernel service provider to export file access services.
+  This service provider gains unified access to files of robotkernel modules. 
+  It support reading and writing.
 
 Package: service-provider-file-protocol
 Architecture: any
 Multi-Arch: same
 Depends: robotkernel ${misc:Depends}
-Description: TODO
+Description: Robotkernel service provider to export file access services.
+  This service provider gains unified access to files of robotkernel modules. 
+  It support reading and writing.
