@@ -9,7 +9,7 @@ extraincludedir = $(includedir)/service_provider_file_protocol
 extrainclude_HEADERS = $(top_srcdir)/include/service_provider_file_protocol/base.h
 
 libservice_provider_file_protocol_la_SOURCES  = provider.cpp
-libservice_provider_file_protocol_la_CXXFLAGS = --std=c++11 -fno-strict-aliasing -Wall 			\
+libservice_provider_file_protocol_la_CXXFLAGS = -fno-strict-aliasing -Wall 			\
 												-I$(top_srcdir)/include -I$(builddir)/include -I$(srcdir)	\
 												@ROBOTKERNEL_CFLAGS@ 
 libservice_provider_file_protocol_la_LDFLAGS  = -Wall -release $(PACKAGE_VERSION)
