@@ -1,8 +1,8 @@
 name: service_provider_file_protocol/file_write
 request:
-- uint32_t: password
-- string: file_name
-- vector/uint8_t: file_data
+- { name: password, type: uint32_t }
+- { name: file_name, type: string }
+- { name: file_data, type: uint8_t, array: true }
 response:
-- string: error_message
+- { name: error_message, type: string, default: "no error" }
 
