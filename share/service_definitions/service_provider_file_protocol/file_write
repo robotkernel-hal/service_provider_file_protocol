@@ -1,9 +1,9 @@
 services:
   - name: service_provider_file_protocol/file_write
     request:
-      - { name: password, type: uint32_t }
-      - { name: file_name, type: string }
-      - { name: file_data, type: uint8_t, array: true }
+      password: { type: uint32_t }
+      file_name: { type: string }
+      file_data: { type: uint8_t, array: true }
     response:
-      - { name: error_message, type: string, default: "no error" }
+      error_message: { type: string, default: "no error" }
 

@@ -1,9 +1,9 @@
 services:
   - name: service_provider_file_protocol/file_read
     request:
-      - { name: password, type: uint32_t, default: 0 }
-      - { name: file_name, type: string }
+      password: { type: uint32_t, default: 0 }
+      file_name: { type: string }
     response:
-      - { name: file_data, type: uint8_t, array: true }
-      - { name: error_message, type: string, default: "no error" }
+      file_data: { type: uint8_t, array: true }
+      error_message: { type: string, default: "no error" }
 
