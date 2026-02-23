@@ -1,5 +1,5 @@
 services:
-  - name: service_provider_file_protocol/file_write
+  service_provider_file_protocol/file_write:
     request:
       password: { type: uint32_t }
       file_name: { type: string }

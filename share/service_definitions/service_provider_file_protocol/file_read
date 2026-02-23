@@ -1,5 +1,5 @@
 services:
-  - name: service_provider_file_protocol/file_read
+  service_provider_file_protocol/file_read:
     request:
       password: { type: uint32_t, default: 0 }
       file_name: { type: string }
