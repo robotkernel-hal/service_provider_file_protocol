@@ -1,4 +1,4 @@
-service-provider-file-protocol (6.0.0) unstable; urgency=low
+service-provider-file-protocol (6.0.0) stable; urgency=low
 
   * fix: new conant_template
   * update: debian desc
